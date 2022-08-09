@@ -1,4 +1,29 @@
 package animals.herbivores;
 
-public class Caterpillar {
+import island.Island;
+import island.Location;
+import plants.Plant;
+
+public class Caterpillar extends Herbivore {
+
+    public Caterpillar() {
+        // вернуть максимальную сытость на 0
+        super("caterpillar " + count, 0.01, 1000, 0, 1);
+        count++;
+    }
+
+    @Override
+    public void breed() {
+
+    }
+
+    @Override
+    public void chooseDirection(Location currentLocation, Island island) {
+        super.chooseDirection(currentLocation, island);
+    }
+
+    @Override
+    public void eat(Location location) {
+        super.eat(location);
+    }
 }

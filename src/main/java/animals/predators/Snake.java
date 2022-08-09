@@ -1,14 +1,15 @@
-package animals.herbivores;
+package animals.predators;
 
+import animals.herbivores.Herbivore;
 import island.Island;
 import island.Location;
-import plants.Plant;
 
-public class Buffalo extends Herbivore {
-    public static int count;
+import java.util.List;
 
-    public Buffalo() {
-        super("buffalo " + count, 700, 10, 3, 100);
+public class Snake extends Predator {
+
+    public Snake() {
+        super("snake " + count, 15, 30, 1, 3);
         count++;
     }
 
@@ -22,9 +23,5 @@ public class Buffalo extends Herbivore {
         super.chooseDirection(currentLocation, island);
     }
 
-    @Override
-    public void eat(Location location) {
-
-    }
 
 }

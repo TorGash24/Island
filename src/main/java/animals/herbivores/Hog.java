@@ -4,11 +4,10 @@ import island.Island;
 import island.Location;
 import plants.Plant;
 
-public class Buffalo extends Herbivore {
-    public static int count;
+public class Hog extends Herbivore {
 
-    public Buffalo() {
-        super("buffalo " + count, 700, 10, 3, 100);
+    public Hog() {
+        super("hog " + count, 400, 50, 2 , 50);
         count++;
     }
 
@@ -24,7 +23,6 @@ public class Buffalo extends Herbivore {
 
     @Override
     public void eat(Location location) {
-
+        super.eat(location);
     }
-
 }
