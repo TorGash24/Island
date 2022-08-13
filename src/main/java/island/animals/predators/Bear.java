@@ -7,7 +7,7 @@ public class Bear extends Predator {
 
 
     public Bear() {
-        super(AnimalType.BEAR, "bear " + count, 500, 2, 3, 80);
+        super(AnimalType.BEAR, 500, 2, 3, 80);
         count++;
     }
 
