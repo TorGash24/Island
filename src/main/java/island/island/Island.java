@@ -25,29 +25,6 @@ public class Island {
         }
     }
 
-    public void addAnimals() {
-//        List<String> types = Config.ALL_TYPES_ANIMALS;
-//        HerbivoreFactory factory = new HerbivoreFactory();
-//
-////        for (int x = 0; x < locations.length; x++) {
-////            for (int y = 0; y < locations[x].length; y++) {
-////                locations[x][y].addAnimalsFromLocation();
-////            }
-////        }
-//
-//        for (int x = 0; x < locations.length; x++) {
-//            for (int y = 0; y < locations[x].length; y++) {
-//                for (int i = 0; i < types.size(); i++) {
-//                    int randomCountType = new Random().nextInt(50);
-//                    for (int z = 0; z < randomCountType % types.size(); z++) {
-//                        Animal animal = factory.createInstance(types.get(z));
-//                        locations[x][y].addAnimals(animal);
-//                    }
-//                }
-//            }
-//        }
-    }
-
     public void printStatus(){
 
         int allEntity = 0;

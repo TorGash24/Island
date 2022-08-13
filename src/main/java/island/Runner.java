@@ -15,7 +15,6 @@ public class Runner {
     public static void main(String[] args) {
 
         Island island = Island.getIsland(Config.WIDTH, Config.HEIGHT);
-        island.addAnimals();
         System.out.println("Start position");
         island.printStatus();
         ExecutorService service = Executors.newScheduledThreadPool(1);
