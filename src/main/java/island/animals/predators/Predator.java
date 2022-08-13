@@ -11,13 +11,32 @@ public abstract class Predator extends Animal {
 
     public static int count;
 
-    public Predator(AnimalType type, String name, double weight, int maxCountFromLocation, int maxSpeed, double maxSatiety) {
-        super(type, name, weight, maxCountFromLocation, maxSpeed, maxSatiety);
+    public Predator(AnimalType type, double weight, int maxCountFromLocation, int maxSpeed, double maxSatiety) {
+        super(type, weight, maxCountFromLocation, maxSpeed, maxSatiety);
+    }
+
+    public <T>List<T> breed(Location currentLocation) {
+        AnimalType typeAnimalOne = this.getType();
+        List<Predator> predators = currentLocation.getPredators();
+        Iterator<Predator> iteratorPredator = predators.iterator();
+        AbstractFactory factory = new PredatorsFactory();
+
+        List<T> newPredators = new ArrayList<>();
+
+
+
+        while (iteratorPredator.hasNext()) {
+            AnimalType typeAnimalTwo = iteratorPredator.next().getType();
+            if (typeAnimalOne == typeAnimalTwo && this.satiety == maxSatiety) {
+                newPredators.add((T)factory.createInstance(typeAnimalOne));
+            }
+        }
+        return newPredators;
     }
 
 
-    @Override
-    public <T extends Animal>void eat(List<T> victim, Location location) {
+
+    public <T extends Animal>void eatAnimal(List<T> victim) {
         Iterator<T> iterator = victim.iterator();
 
         while (!isSatiety() && iterator.hasNext()) {
@@ -29,26 +48,21 @@ public abstract class Predator extends Animal {
 
                 Map<String, Integer> statistics = Config.PROBABILITIES.get(predatorName);
 
-                if (animal == null) {
-                    System.out.println(animal + " animal null");
-                    System.out.println(this + " null");
-                }
-
-                String animalName = animal.getClass().getSimpleName().toLowerCase();
+                String victimName = animal.getClass().getSimpleName().toLowerCase();
 
 
-                if (statistics.containsKey(animalName)) {
+                if (statistics.containsKey(victimName)) {
 
-                    int percent = statistics.get(animalName);
+                    int percent = statistics.get(victimName);
 
                     int random = new Random().nextInt(100);
 
 
-//                    if (random <= percent) {
-//                        this.setParameters(animal);
-//                        iterator.remove();
-//
-//                    }
+                    if (random <= percent) {
+                        this.setParameters(animal);
+                        iterator.remove();
+
+                    }
 
 
                 }
@@ -58,71 +72,8 @@ public abstract class Predator extends Animal {
 
     }
 
-    @Override
-    public void breed(Location currentLocation) {
-//        Iterator<Predator> iterator = currentLocation.getPredators().iterator();
-//        List<Predator> predators = currentLocation.getPredators();
-//        AbstractFactory factory = new HerbivoreFactory();
-//
-//        while (iterator.hasNext()) {
-//            String oneAnimal = this.getClass().getSimpleName();
-//            String twoAnimal = iterator.next().getClass().getSimpleName();
-//
-//            if (oneAnimal.equals(twoAnimal)) {
-//                Predator newAnimal = (Predator) factory.createInstance(oneAnimal);
-//                predators.add(newAnimal);
-//            }
-//
-//
-//        }
 
 
-    }
-
-    public void eat(List<Animal> herbivores) {
-//        Iterator<Animal> iterator = herbivores.iterator();
-//
-//        while (!isSatiety() && iterator.hasNext()) {
-//            Animal herbivore = iterator.next();
-//
-//            String predatorName = this.getClass().getSimpleName().toLowerCase();
-//
-//            if (Config.PROBABILITIES.containsKey(predatorName)) {
-//
-//                Map<String, Integer> statistics = Config.PROBABILITIES.get(predatorName);
-//
-//                String herbivoreName = herbivore.getClass().getSimpleName().toLowerCase();
-//
-//
-//                if (statistics.containsKey(herbivoreName)) {
-//
-//                    int percent = statistics.get(herbivoreName);
-//
-//                    int random = new Random().nextInt(100);
-//
-//
-//
-//                    if (random <= percent) {
-//                        if ((herbivore.weight + satiety > maxSatiety)) {
-//                            satiety = maxSatiety;
-//
-//                        } else  {
-//                            satiety += herbivore.weight;
-//                        }
-//                        iterator.remove();
-//
-//                    }
-//
-//                    double day = maxSatiety * 0.25;
-//                    satiety -= day;
-//
-//
-//                }
-//            }
-//        }
-
-
-    }
 
 
 }

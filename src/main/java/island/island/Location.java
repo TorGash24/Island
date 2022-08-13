@@ -9,6 +9,7 @@ import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -92,71 +93,91 @@ public class Location {
     // ОПИСЫВАЕМ СОБЫТИЯ НА ЛОКАЦИИ
     public void calculate() {
 
+        eating();
+        moving();
+        breeding();
+        endOfTheDAy();
 
-        // В ЦИКЛЕ ПЕРЕБИРАЕМ ХИЩНИКОВ ИЗ ЛИСТА
-        // И КАЖДОМУ ПО ОЧЕРЕДИ СУЕМ СПИСОК ТРАВОЯДНЫХ
+    }
+
+    private void breeding() {
+        List<Predator> readyToBreedPredators = new ArrayList<>();
+        List<Herbivore> readyToBreedHerbivores = new ArrayList<>();
+
 
         for (int i = 0; i < predators.size(); i++) {
             Predator predator = predators.get(i);
-
-
-//            if ((predator.satiety < predator.maxSatiety * 20 /100) || predator.weight <= 0) {
-//                predators.remove(predator);
-//                break;
-//            }
-            predator.eat(herbivores, this);
-            predator.eat(predators, this);
-
-            // РАЗМНОЖАЕМСЯ
-//            predator.breed(this);
-
-            // ДВИГАЕМСЯ
-
-            predator.chooseDirection(this, Island.getIsland());
+            readyToBreedPredators.addAll(0, predator.breed(this));
         }
 
-
-//        for (int i = 0; i < predators.size(); i++) {
-//            Predator predator = predators.get(i);
-//            day(predator);
-//        }
-
-        // ТО ЖЕ САМОЕ ДЕЛАЕМ ДЛЯ ТРАВОЯДНЫХ
+        predators.addAll(predators.size(), readyToBreedPredators);
 
         for (int i = 0; i < herbivores.size(); i++) {
             Herbivore herbivore = herbivores.get(i);
-            day(herbivore);
+            readyToBreedHerbivores.addAll(0, herbivore.breed(this));
+        }
 
-            if ((herbivore.satiety < herbivore.maxSatiety * 20 / 100) || herbivore.weight <= 0) {
-                herbivores.remove(herbivore);
-                break;
+        herbivores.addAll(herbivores.size(), readyToBreedHerbivores);
+
+
+    }
+
+    private void endOfTheDAy() {
+        List<Predator> predatorList = predators;
+        List<Herbivore> herbivoreList = herbivores;
+
+        Iterator<Predator> predatorIterator = predatorList.iterator();
+        Iterator<Herbivore> herbivoreIterator = herbivoreList.iterator();
+
+        while (predatorIterator.hasNext()) {
+            Predator predator = predatorIterator.next();
+            if (!predator.checkIsLive()) {
+                predatorIterator.remove();
             }
-//            herbivore.eat(this);
-            herbivore.breed(this);
+        }
+
+        while (herbivoreIterator.hasNext()) {
+            Herbivore herbivore = herbivoreIterator.next();
+            if (!herbivore.checkIsLive()) {
+                herbivoreIterator.remove();
+            }
+        }
+
+
+    }
+
+
+    private void moving() {
+
+        for (int i = 0; i < predators.size(); i++) {
+            Predator predator = predators.get(i);
+            predator.chooseDirection(this, Island.getIsland());
+        }
+
+        for (int i = 0; i < herbivores.size(); i++) {
+            Herbivore herbivore = herbivores.get(i);
             herbivore.chooseDirection(this, Island.getIsland());
         }
+    }
 
-        for (int i = 0; i < plants.size(); i++) {
-            Plant plant = plants.get(i);
+    private void eating() {
+        for (int i = 0; i < herbivores.size(); i++) {
+            Herbivore herbivore = herbivores.get(i);
+            herbivore.eatPlant(plants);
+        }
 
+        for (int i = 0; i < predators.size(); i++) {
+            Predator predator = predators.get(i);
+            predator.eatAnimal(predators);
+        }
+
+        for (int i = 0; i < predators.size(); i++) {
+            Predator predator = predators.get(i);
+            predator.eatAnimal(herbivores);
         }
 
 
     }
-
-    public void day(Animal animal) {
-        animal.satiety = animal.satiety - animal.satiety * 0.4;
-        animal.weight = animal.weight - animal.weight * 0.4;
-    }
-
-//    @Override
-//    public String toString() {
-//        return "Location " +
-//                coord + "\n" + "countPredator = " + predators.size() + ", countHerbivores = " + herbivores.size() + ", countPlants = " + plants.size() + "\n" +
-//                "herbivores=" + herbivores + "\n" +
-//                "predators=" + predators + "\n" +
-//                "plants=" + plants + "\n";
-//    }
 
     @Override
     public String toString() {
@@ -186,12 +207,11 @@ public class Location {
         }
 
 
-
         return "Location " +
                 coord + "\n" + "countPredator = " + predators.size() + ", countHerbivores = " + herbivores.size() + ", countPlants = " + plants.size()
-                + "\n Predators =" + statisticsPredatorsToLocation.toString()
-                + "\n Herbivores = " + statisticsHerbivoresToLocation.toString()
-                + "\n Plants = {"+ Plant.getType().image +"=" + plants.size() + "}\n";
+                + "\nPredators =" + statisticsPredatorsToLocation.toString()
+                + "\nHerbivores = " + statisticsHerbivoresToLocation.toString()
+                + "\nPlants = {" + Plant.getType().image + "=" + plants.size() + "}\n";
 
 
     }

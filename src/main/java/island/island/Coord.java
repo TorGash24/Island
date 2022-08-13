@@ -36,14 +36,8 @@ public class Coord {
         this.y = y;
     }
 
-    public void moveToDirection(Direction direction) {
-
-        switch (direction) {
-            case UP: setY(y + 1); break;
-            case DOWN: setY(y - 1); break;
-            case LEFT: setX(x - 1); break;
-            case RIGHT: setX(x + 1); break;
-        }
+    public Coord moveToDirection(Direction direction) {
+        return new Coord(this.x + direction.getDeltaX(), this.y + direction.getDeltaY());
 
     }
 

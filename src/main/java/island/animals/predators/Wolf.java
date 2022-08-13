@@ -7,14 +7,8 @@ import island.island.Location;
 public class Wolf extends Predator {
 
     public Wolf() {
-        super(AnimalType.WOLF, "wolf " + count, 50, 30, 3, 8);
+        super(AnimalType.WOLF, 50, 30, 3, 8);
         count++;
     }
-
-    @Override
-    public void chooseDirection(Location currentLocation, Island island) {
-        super.chooseDirection(currentLocation, island);
-    }
-
 
 }

@@ -1,8 +1,12 @@
 package island.animals;
 
+import island.animals.herbivores.Herbivore;
+import island.animals.predators.Predator;
 import island.island.*;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -11,7 +15,6 @@ public abstract class Animal {
     private AnimalType type;
 
     public static int count;
-    public String name; //имя
     public double weight; //вес
     @Getter
     public int maxCountFromLocation; // максимальное количество на клетке
@@ -22,15 +25,14 @@ public abstract class Animal {
     public static double maxWeight;
 
 
-    public Animal(AnimalType type, String name, double weight, int maxCountFromLocation, int maxSpeed, double maxSatiety) {
+    public Animal(AnimalType type, double weight, int maxCountFromLocation, int maxSpeed, double maxSatiety) {
         count++;
         this.type = type;
-        this.name = name;
         this.weight = weight;
         this.maxCountFromLocation = maxCountFromLocation;
         this.maxSpeed = maxSpeed;
         this.maxSatiety = maxSatiety;
-        this.satiety = new Random().nextInt((int)maxSatiety);
+        this.satiety = new Random().nextInt((int) maxSatiety);
         maxWeight = weight + maxSatiety;
     }
 
@@ -42,17 +44,7 @@ public abstract class Animal {
     public void setParameters(Animal victim) {
         double weightVictim = victim.weight;
 
-        if (weight + weightVictim >= maxWeight) {
-            weight = maxWeight;
-        } else {
-            weight += weightVictim;
-        }
-
-        if (satiety + weightVictim >= maxSatiety) {
-            satiety = maxSatiety;
-        } else {
-            satiety += weightVictim;
-        }
+        satiety = Math.min(satiety + weightVictim, maxSatiety);
     }
 
 
@@ -65,10 +57,10 @@ public abstract class Animal {
     }
 
     private Coord findNextCoord(Coord currentCoord, int max_X, int max_Y) {
-        int randomStep = new Random().nextInt(this.maxSpeed+1);
+        int randomStep = new Random().nextInt(this.maxSpeed + 1);
         Coord nextCoord = new Coord(currentCoord.getX(), currentCoord.getY());
 
-        for (int step =0; step < randomStep; step++) {
+        for (int step = 0; step < randomStep; step++) {
             nextCoord = getStep(currentCoord, this, Config.WIDTH, Config.HEIGHT);
         }
 
@@ -78,15 +70,11 @@ public abstract class Animal {
     private Coord getStep(Coord currentCoord, Animal animal, int x, int y) {
         Direction randomDirection = Direction.getRandomDirection();
 
-        Coord nextCoord = new Coord(currentCoord.getX(), currentCoord.getY());
-
-
-        nextCoord.moveToDirection(randomDirection);
+        Coord nextCoord = currentCoord.moveToDirection(randomDirection);
 
         while (!nextCoord.isCheckCoord()) {
-            nextCoord.setXY(currentCoord.getX(), currentCoord.getY());
             randomDirection = Direction.getRandomDirection();
-            nextCoord.moveToDirection(randomDirection);
+            nextCoord = currentCoord.moveToDirection(randomDirection);
         }
 
         return nextCoord;
@@ -98,20 +86,26 @@ public abstract class Animal {
         return new Random().nextInt(bound);
     }
 
-    public abstract <T extends Animal> void eat(List<T> victim, Location location);
-
 
     @Override
     public String toString() {
-        return this.getClass().getSimpleName() +"{" +
-                "name='" + name + '\'' +
+        return this.getClass().getSimpleName() + "{" +
+                '\'' +
                 ", weight=" + weight +
                 ", satiety=" + satiety +
                 '}';
     }
 
 
-    public abstract void breed(Location currentLocation);
+    public abstract <T> List<T> breed(Location currentLocation);
+
+
+
+    public boolean checkIsLive() {
+        this.satiety = (Math.max(0, satiety - (10 * maxSatiety / 100)));
+        return satiety > 0;
+
+    }
 }
 
 
