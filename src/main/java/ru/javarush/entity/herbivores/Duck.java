@@ -1,14 +1,10 @@
 package ru.javarush.entity.herbivores;
 
-import ru.javarush.system.Config;
+import ru.javarush.system.Config.AnimalType;
 
 public class Duck extends Herbivore{
 
     public Duck() {
-        // вернуть максимальную сытость на 0,15
-        super(Config.AnimalType.DUCK, 1, 200, 4, 1);
-        count++;
+        super(AnimalType.DUCK, 1, 200, 4, 0.15);
     }
-
-
 }

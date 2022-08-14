@@ -1,6 +1,5 @@
 package ru.javarush.system;
 
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -9,7 +8,7 @@ public class Config {
     public static final int WIDTH = 4;
     public static final int HEIGHT = 4;
     public static final int COUNT_DAY = 50;
-    public static final long CYCLE_DURATION = 1000;
+    public static final long CYCLE_DURATION = 2000;
 
     public static final Map<AnimalType, Map<AnimalType, Integer>> PROBABILITIES = Map.of(
             AnimalType.WOLF, Map.of(

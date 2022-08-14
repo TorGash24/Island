@@ -1,16 +1,10 @@
 package ru.javarush.entity.herbivores;
 
-import ru.javarush.system.Config;
+import ru.javarush.system.Config.AnimalType;
 
 public class Buffalo extends Herbivore {
-    public static int count;
 
     public Buffalo() {
-        super(Config.AnimalType.BUFFALO, 700, 10, 3, 100);
-        count++;
+        super(AnimalType.BUFFALO, 700, 10, 3, 100);
     }
-
-
-
-
 }

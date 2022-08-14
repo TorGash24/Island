@@ -1,13 +1,13 @@
 package ru.javarush.factory;
 
 import ru.javarush.entity.herbivores.*;
-import ru.javarush.system.Config;
+import ru.javarush.system.Config.AnimalType;
 
 
 public class HerbivoreFactory implements AbstractFactory<Herbivore> {
 
     @Override
-    public Herbivore createInstance(Config.AnimalType animalType) {
+    public Herbivore createInstance(AnimalType animalType) {
 
         return switch (animalType) {
             case BUFFALO -> new Buffalo();

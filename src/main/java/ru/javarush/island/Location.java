@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -45,7 +44,7 @@ public class Location {
     public void calculate() {
 
         eating();
-        moving();
+//        moving();
         breeding();
         endOfTheDAy();
 
@@ -70,7 +69,7 @@ public class Location {
 
     private List<Plant> addPlantsToLocation() {
         List<Plant> newPlants = new ArrayList<>();
-        int countToLocation = Config.RandomClass.getRandom(Plant.getMaxCountFromLocation() / 2, Plant.getMaxCountFromLocation());
+        int countToLocation = Config.RandomClass.getRandom(Plant.getMAX_COUNT_FROM_LOCATION() / 2, Plant.getMAX_COUNT_FROM_LOCATION());
         for (int i = 0; i < countToLocation; i++) {
             newPlants.add(new Plant());
         }
@@ -128,24 +127,27 @@ public class Location {
             List<Herbivore> readyToBreedHerbivores = new ArrayList<>();
 
             for (int i = 0; i < predators.size(); i++) {
-                for (int j = 0; j < predators.size(); j++) {
-                    Predator predatorOne = predators.get(i);
-                    Predator predatorTwo = predators.get(j);
-                    int random = ThreadLocalRandom.current().nextInt(0, 100);
-                    if (predatorOne.getType() == predatorTwo.getType() && predatorOne.getSatiety() == predatorOne.getMaxSatiety() && predatorTwo.getSatiety() == predatorTwo.getMaxSatiety() && random > 60) {
-                        readyToBreedPredators.add(predators.get(i).breed(this));
+                Predator predator = predators.get(i);
+                Config.AnimalType typeOne = predator.getType();
+                for (int j = i + 1; j < predators.size(); j++) {
+                    Config.AnimalType typeTwo = predators.get(j).getType();
+                    if (typeOne == typeTwo && predator.getSatiety() == predator.getMaxSatiety()) {
+                        readyToBreedPredators.add((Predator) predator.breed());
                     }
                 }
-                predators.addAll(predators.size(), readyToBreedPredators);
             }
-
             predators.addAll(predators.size(), readyToBreedPredators);
 
             for (int i = 0; i < herbivores.size(); i++) {
                 Herbivore herbivore = herbivores.get(i);
-                readyToBreedHerbivores.addAll(herbivore.breed(this));
+                Config.AnimalType typeOne = herbivore.getType();
+                for (int j = i + 1; j < herbivores.size(); j++) {
+                    Config.AnimalType typeTwo = herbivores.get(j).getType();
+                    if (typeOne == typeTwo && herbivore.getSatiety() == herbivore.getMaxSatiety()) {
+                        readyToBreedHerbivores.add((Herbivore) herbivore.breed());
+                    }
+                }
             }
-
             herbivores.addAll(herbivores.size(), readyToBreedHerbivores);
         } catch (RuntimeException e) {
             e.printStackTrace();
@@ -227,6 +229,6 @@ public class Location {
                 coordinate + "\n" + "countPredator = " + predators.size() + ", countHerbivores = " + herbivores.size() + ", countPlants = " + plants.size()
                 + "\nPredators =" + statisticsPredatorsToLocation.toString()
                 + "\nHerbivores = " + statisticsHerbivoresToLocation.toString()
-                + "\nPlants = {" + Plant.getType().image + "=" + plants.size() + "}\n";
+                + "\nPlants = {" + Plant.getTYPE().image + "=" + plants.size() + "}\n";
     }
 }

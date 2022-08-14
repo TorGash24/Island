@@ -1,14 +1,10 @@
 package ru.javarush.entity.herbivores;
 
-import ru.javarush.system.Config;
+import ru.javarush.system.Config.AnimalType;
 
 public class Horse extends Herbivore {
 
     public Horse() {
-        super(Config.AnimalType.HORSE, 400, 20 , 4, 60);
-        count++;
+        super(AnimalType.HORSE, 400, 20 , 4, 60);
     }
-
-
-
 }

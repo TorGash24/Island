@@ -2,19 +2,16 @@ package ru.javarush.entity;
 
 import lombok.Setter;
 import ru.javarush.system.Config;
+import ru.javarush.system.Config.AnimalType;
 import lombok.Getter;
 import ru.javarush.island.Coordinate;
 import ru.javarush.island.Direction;
 import ru.javarush.island.Island;
 import ru.javarush.island.Location;
 
-import java.util.Random;
-
 public abstract class Animal {
     @Getter
-    private final Config.AnimalType type;
-
-    public static int count;
+    private final AnimalType type;
 
     @Getter
     private final double weight;
@@ -32,9 +29,7 @@ public abstract class Animal {
     @Setter
     private double satiety;
 
-
-    public Animal(Config.AnimalType type, double weight, int maxCountFromLocation, int maxSpeed, double maxSatiety) {
-        count++;
+    public Animal(AnimalType type, double weight, int maxCountFromLocation, int maxSpeed, double maxSatiety) {
         this.type = type;
         this.weight = weight;
         this.maxCountFromLocation = maxCountFromLocation;
@@ -43,35 +38,21 @@ public abstract class Animal {
         this.satiety = 0;
     }
 
-    public void setParameters(Animal victim) {
-        double weightVictim = victim.weight;
+    public abstract Animal breed();
 
-        satiety = Math.min(satiety + weightVictim, maxSatiety);
-    }
-
-
-    public void chooseDirection(Location currentLocation, Island island) {
-        Coordinate coordinate = findNextCoord(currentLocation.getCoordinate(), Config.WIDTH, Config.HEIGHT);
-
-        island.moveToOtherLocation(coordinate, this);
-        currentLocation.leave(this);
-
-    }
-
-    private Coordinate findNextCoord(Coordinate currentCoordinate, int maxX, int maxY) {
-        int randomStep = new Random().nextInt(this.maxSpeed + 1);
+    private Coordinate findNextCoordinate(Coordinate currentCoordinate) {
+        int randomStep = Config.RandomClass.getRandom(0, maxSpeed);
         Coordinate nextCoordinate = currentCoordinate;
 
         for (int step = 0; step < randomStep; step++) {
-            nextCoordinate = getStep(currentCoordinate, this, Config.WIDTH, Config.HEIGHT);
+            nextCoordinate = getStep(currentCoordinate);
         }
 
         return nextCoordinate;
     }
 
-    private Coordinate getStep(Coordinate currentCoordinate, Animal animal, int x, int y) {
+    private Coordinate getStep(Coordinate currentCoordinate) {
         Direction randomDirection = Direction.getRandomDirection();
-
         Coordinate nextCoordinate = currentCoordinate.moveToDirection(randomDirection);
 
         while (!nextCoordinate.isCheckCoordinate()) {
@@ -80,22 +61,23 @@ public abstract class Animal {
         }
 
         return nextCoordinate;
-
-
     }
 
+    public void chooseDirection(Location currentLocation, Island island) {
+        Coordinate coordinate = findNextCoordinate(currentLocation.getCoordinate());
 
-    public abstract <T extends Animal> T breed(Location currentLocation);
+        island.moveToOtherLocation(coordinate, this);
+        currentLocation.leave(this);
+    }
 
     public boolean isSatiety() {
         return this.satiety < this.maxSatiety;
     }
 
-
+    // TODO
     public boolean checkIsLive() {
         this.satiety = (Math.max(0, satiety - (100 * maxSatiety / 100)));
         return satiety > 0;
-
     }
 
     @Override
@@ -107,5 +89,3 @@ public abstract class Animal {
                 '}';
     }
 }
-
-

@@ -11,7 +11,7 @@ import java.util.*;
 
 public abstract class Predator extends Animal {
 
-    public Predator(AnimalType type, double weight, int maxCountFromLocation, int maxSpeed, double maxSatiety) {
+     Predator(AnimalType type, double weight, int maxCountFromLocation, int maxSpeed, double maxSatiety) {
         super(type, weight, maxCountFromLocation, maxSpeed, maxSatiety);
     }
 
@@ -40,8 +40,8 @@ public abstract class Predator extends Animal {
     }
 
     @Override
-    public <T extends Animal> T breed(Location currentLocation) {
-        AbstractFactory factory = new PredatorsFactory();
-        return (T) factory.createInstance(this.getType());
+    public Animal breed() {
+        PredatorsFactory factory = new PredatorsFactory();
+        return factory.createInstance(this.getType());
     }
 }

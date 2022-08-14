@@ -4,24 +4,24 @@ import ru.javarush.entity.Animal;
 import ru.javarush.system.Config;
 import lombok.Getter;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class Island {
 
-    @Getter
     private static Island island;
 
     @Getter
     private static Location[][] locations;
 
     public static Island getIsland() {
-        island = new Island();
-        locations = new Location[Config.WIDTH][Config.HEIGHT];
-        island.initialize();
+        if (island == null) {
+            island = new Island();
+            locations = new Location[Config.WIDTH][Config.HEIGHT];
+            initialize();
+            return island;
+        }
         return island;
     }
 
-    private void initialize() {
+    private static void initialize() {
         for (int x = 0; x < locations.length; x++) {
             for (int y = 0; y < locations[x].length; y++) {
                 locations[x][y] = new Location(new Coordinate(x, y));
@@ -29,21 +29,7 @@ public class Island {
         }
     }
 
-    public void printStatus() {
-
-        for (int x = 0; x < locations.length; x++) {
-            for (int y = 0; y < locations[x].length; y++) {
-                System.out.println(locations[x][y]);
-            }
-        }
-    }
-
-    public void moveToOtherLocation(Coordinate coordinate, Animal animal) {
-        Location location = getLocationByCoord(coordinate);
-        location.addAnimals(animal);
-    }
-
-    private Location getLocationByCoord(Coordinate coordinate) {
+    private Location getLocationByCoordinate(Coordinate coordinate) {
         for (int x = 0; x < locations.length; x++) {
             for (int y = 0; y < locations[x].length; y++) {
                 Location location = locations[x][y];
@@ -53,5 +39,10 @@ public class Island {
             }
         }
         throw new IllegalArgumentException();
+    }
+
+    public void moveToOtherLocation(Coordinate coordinate, Animal animal) {
+        Location location = getLocationByCoordinate(coordinate);
+        location.addAnimals(animal);
     }
 }

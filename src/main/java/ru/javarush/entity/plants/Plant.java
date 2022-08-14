@@ -1,21 +1,17 @@
 package ru.javarush.entity.plants;
 
-import ru.javarush.system.Config;
+import ru.javarush.system.Config.AnimalType;
 import lombok.Getter;
 
 public class Plant {
     @Getter
-    private static Config.AnimalType type = Config.AnimalType.PLANT;
+    private static final AnimalType TYPE = AnimalType.PLANT;
 
-    public static int count;
     @Getter
-    public static double weight = 1;
-    @Getter
-    private static int maxCountFromLocation = 200;
+    private static final double WEIGHT = 1;
 
-    public Plant() {
-        count++;
-    }
+    @Getter
+    private static final int MAX_COUNT_FROM_LOCATION = 200;
 
     @Override
     public String toString() {
