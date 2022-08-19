@@ -4,7 +4,7 @@ import ru.javarush.island.Location;
 
 public class Cicle implements Runnable {
 
-    Location location;
+    private final Location location;
 
     public Cicle(Location location) {
         this.location = location;

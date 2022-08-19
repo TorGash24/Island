@@ -14,12 +14,14 @@ public abstract class Herbivore extends Animal {
     }
 
     public void eatPlant(List<Plant> plantList) {
-        Iterator<Plant> iterator = plantList.iterator();
+        List<Plant> copyPlantList = new ArrayList<>(plantList);
 
-        while (isSatiety() && iterator.hasNext()) {
-            this.setSatiety(Math.min(
-                    this.getSatiety() + Plant.getWEIGHT(), this.getMaxSatiety()));
-            iterator.remove();
+        for (int i = 0; i < copyPlantList.size(); i++) {
+            if (isSatiety()) {
+                this.setSatiety(Math.min(
+                        this.getSatiety() + Plant.getWEIGHT(), this.getMaxSatiety()));
+                plantList.remove(copyPlantList.get(i));
+            }
         }
     }
 

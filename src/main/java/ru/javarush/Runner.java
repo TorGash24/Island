@@ -8,7 +8,7 @@ public class Runner {
 
     public static void main(String[] args) {
 
-        Island island = Island.getIsland();
+        Island island = new Island();
         Game game = new Game(island);
         GameWorker worker = new GameWorker(game);
         worker.start();

@@ -46,6 +46,7 @@ public abstract class Animal {
 
         for (int step = 0; step < randomStep; step++) {
             nextCoordinate = getStep(currentCoordinate);
+            currentCoordinate = nextCoordinate;
         }
 
         return nextCoordinate;
@@ -53,11 +54,11 @@ public abstract class Animal {
 
     private Coordinate getStep(Coordinate currentCoordinate) {
         Direction randomDirection = Direction.getRandomDirection();
-        Coordinate nextCoordinate = currentCoordinate.moveToDirection(randomDirection);
+        Coordinate nextCoordinate = currentCoordinate.selectCoordinate(randomDirection);
 
         while (!nextCoordinate.isCheckCoordinate()) {
             randomDirection = Direction.getRandomDirection();
-            nextCoordinate = currentCoordinate.moveToDirection(randomDirection);
+            nextCoordinate = currentCoordinate.selectCoordinate(randomDirection);
         }
 
         return nextCoordinate;
@@ -76,7 +77,7 @@ public abstract class Animal {
 
     // TODO
     public boolean checkIsLive() {
-        this.satiety = (Math.max(0, satiety - (100 * maxSatiety / 100)));
+        this.satiety = (Math.max(0, satiety - (10 * maxSatiety / 100)));
         return satiety > 0;
     }
 
