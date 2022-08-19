@@ -41,10 +41,10 @@ public class Location {
         this.plants = addPlantsToLocation();
     }
 
-    public void calculate() {
+    public synchronized void calculate() {
 
         eating();
-//        moving();
+        moving();
         breeding();
         endOfTheDAy();
 
@@ -69,7 +69,7 @@ public class Location {
 
     private List<Plant> addPlantsToLocation() {
         List<Plant> newPlants = new ArrayList<>();
-        int countToLocation = Config.RandomClass.getRandom(Plant.getMAX_COUNT_FROM_LOCATION() / 2, Plant.getMAX_COUNT_FROM_LOCATION());
+        int countToLocation = Config.RandomClass.getRandom(Plant.MAX_COUNT_FROM_LOCATION / 2, Plant.MAX_COUNT_FROM_LOCATION);
         for (int i = 0; i < countToLocation; i++) {
             newPlants.add(new Plant());
         }
@@ -77,7 +77,7 @@ public class Location {
         return newPlants;
     }
 
-    private void eating() {
+    private synchronized void eating() {
         lock.lock();
         try {
             for (int i = 0; i < herbivores.size(); i++) {
@@ -106,12 +106,12 @@ public class Location {
         try {
             for (int i = 0; i < predators.size(); i++) {
                 Predator predator = predators.get(i);
-                predator.chooseDirection(this, Island.getIsland());
+                predator.chooseDirection(this, Island.createAndGetIsland());
             }
 
             for (int i = 0; i < herbivores.size(); i++) {
                 Herbivore herbivore = herbivores.get(i);
-                herbivore.chooseDirection(this, Island.getIsland());
+                herbivore.chooseDirection(this, Island.createAndGetIsland());
             }
         } catch (RuntimeException e) {
             e.printStackTrace();

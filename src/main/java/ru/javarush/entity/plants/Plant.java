@@ -10,8 +10,8 @@ public class Plant {
     @Getter
     private static final double WEIGHT = 1;
 
-    @Getter
-    private static final int MAX_COUNT_FROM_LOCATION = 200;
+
+    public static final int MAX_COUNT_FROM_LOCATION = 200;
 
     @Override
     public String toString() {

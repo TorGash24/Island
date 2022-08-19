@@ -14,7 +14,7 @@ public class Coordinate {
         this.y = y;
     }
 
-    public Coordinate moveToDirection(Direction direction) {
+    public Coordinate selectCoordinate(Direction direction) {
         return new Coordinate(this.x + direction.getDeltaX(), this.y + direction.getDeltaY());
 
     }

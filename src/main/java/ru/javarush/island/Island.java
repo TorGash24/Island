@@ -6,22 +6,20 @@ import lombok.Getter;
 
 public class Island {
 
-    private static Island island;
+    @Getter
+    private final Island island;
 
     @Getter
-    private static Location[][] locations;
+    private final Location[][] locations;
 
-    public static Island getIsland() {
-        if (island == null) {
-            island = new Island();
-            locations = new Location[Config.WIDTH][Config.HEIGHT];
-            initialize();
-            return island;
-        }
-        return island;
+    public Island() {
+        locations = new Location[Config.WIDTH][Config.HEIGHT];
+        initialize();
+        island = this;
     }
 
-    private static void initialize() {
+
+    private void initialize() {
         for (int x = 0; x < locations.length; x++) {
             for (int y = 0; y < locations[x].length; y++) {
                 locations[x][y] = new Location(new Coordinate(x, y));
@@ -40,6 +38,44 @@ public class Island {
         }
         throw new IllegalArgumentException();
     }
+
+    public int getCountPredators() {
+        int count = 0;
+        for (int x = 0; x < locations.length; x++) {
+            for (int y = 0; y < locations[x].length; y++) {
+                count += locations[x][y].getPredators().size();
+            }
+
+        }
+        return count;
+    }
+
+    public int getCountHerbivores() {
+        int count = 0;
+        for (int x = 0; x < locations.length; x++) {
+            for (int y = 0; y < locations[x].length; y++) {
+                count += locations[x][y].getHerbivores().size();
+            }
+
+        }
+        return count;
+    }
+
+    public int getCountPlats() {
+        int count = 0;
+        for (int x = 0; x < locations.length; x++) {
+            for (int y = 0; y < locations[x].length; y++) {
+                count += locations[x][y].getPlants().size();
+            }
+
+        }
+        return count;
+    }
+
+    public int countAnimal() {
+        return getCountPredators() + getCountHerbivores();
+    }
+
 
     public void moveToOtherLocation(Coordinate coordinate, Animal animal) {
         Location location = getLocationByCoordinate(coordinate);

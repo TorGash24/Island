@@ -14,7 +14,7 @@ public class Game {
     }
 
     public void printStatistic() {
-        Location[][] locations = Island.getLocations();
+        Location[][] locations = island.getLocations();
         for (int x = 0; x < locations.length; x++) {
             for (int y = 0; y < locations[x].length; y++) {
                 System.out.println("=".repeat(20));
