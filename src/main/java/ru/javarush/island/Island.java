@@ -4,8 +4,6 @@ import ru.javarush.entity.Animal;
 import ru.javarush.system.Config;
 import lombok.Getter;
 
-import java.util.Optional;
-
 public class Island {
     public static Island referenceIsland = null;
 
@@ -83,7 +81,6 @@ public class Island {
     public int countAnimal() {
         return getCountPredators() + getCountHerbivores();
     }
-
 
     public void moveToOtherLocation(Coordinate coordinate, Animal animal) {
         Location location = getLocationByCoordinate(coordinate);

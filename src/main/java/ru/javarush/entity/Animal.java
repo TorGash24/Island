@@ -1,6 +1,7 @@
 package ru.javarush.entity;
 
 import lombok.Setter;
+import ru.javarush.entity.herbivores.Herbivore;
 import ru.javarush.system.Config;
 import ru.javarush.system.Config.AnimalType;
 import lombok.Getter;
@@ -29,7 +30,7 @@ public abstract class Animal {
     @Setter
     private double satiety;
 
-    public Animal(AnimalType type, double weight, int maxCountFromLocation, int maxSpeed, double maxSatiety) {
+    protected Animal(AnimalType type, double weight, int maxCountFromLocation, int maxSpeed, double maxSatiety) {
         this.type = type;
         this.weight = weight;
         this.maxCountFromLocation = maxCountFromLocation;
@@ -64,6 +65,10 @@ public abstract class Animal {
         return nextCoordinate;
     }
 
+    private void changeParameters() {
+        this.satiety = (Math.max(0, satiety - (Config.PERCENT_IN_DEY * maxSatiety / 100)));
+    }
+
     public void chooseDirection(Location currentLocation, Island island) {
         Coordinate coordinate = findNextCoordinate(currentLocation.getCoordinate());
 
@@ -75,18 +80,17 @@ public abstract class Animal {
         return this.satiety < this.maxSatiety;
     }
 
-    // TODO
-    public boolean checkIsLive() {
-        this.satiety = (Math.max(0, satiety - (10 * maxSatiety / 100)));
-        return satiety > 0;
+    public boolean isEatFood() {
+        if (this instanceof Herbivore) {
+            return Config.RandomClass.getProbability(Config.PERCENT_EAT_FOOD_HERBIVORE);
+
+        } else {
+            return Config.RandomClass.getProbability(Config.PERCENT_EAT_FOOD_PREDATOR);
+        }
     }
 
-    @Override
-    public String toString() {
-        return this.getClass().getSimpleName() + "{" +
-                '\'' +
-                ", weight=" + weight +
-                ", satiety=" + satiety +
-                '}';
+    public boolean checkIsDead() {
+        changeParameters();
+        return satiety <= 0;
     }
 }
