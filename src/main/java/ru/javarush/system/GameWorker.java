@@ -27,7 +27,7 @@ public class GameWorker extends Thread {
         Island island = game.getIsland();
         Location[][] locations = island.getLocations();
         ScheduledExecutorService statisticTask = Executors.newScheduledThreadPool(1);
-        ScheduledExecutorService gameTask = Executors.newScheduledThreadPool(1);
+        ScheduledExecutorService gameTask = Executors.newScheduledThreadPool(8);
         ScheduledExecutorService growPlants = Executors.newScheduledThreadPool(1);
         statisticTask.scheduleWithFixedDelay(new Statistic(island), 1000, Config.CYCLE_DURATION, TimeUnit.MILLISECONDS);
         growPlants.scheduleWithFixedDelay(new Sprouts(island), 1000, Config.CYCLE_DURATION, TimeUnit.MILLISECONDS);

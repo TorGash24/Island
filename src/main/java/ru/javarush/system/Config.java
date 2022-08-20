@@ -5,11 +5,11 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Config {
 
-    public static final int WIDTH = 10;
-    public static final int HEIGHT = 10;
+    public static final int WIDTH = 20;
+    public static final int HEIGHT = 20;
     public static final long CYCLE_DURATION = 2000;
-    public static final int PERCENT_IN_DEY = 20;
-    public static final int PERCENT_EAT_FOOD_HERBIVORE = 35;
+    public static final int PERCENT_IN_DEY = 25;
+    public static final int PERCENT_EAT_FOOD_HERBIVORE = 30;
     public static final int PERCENT_EAT_FOOD_PREDATOR = 100;
 
     public static final Map<AnimalType, Map<AnimalType, Integer>> PROBABILITIES = Map.of(
