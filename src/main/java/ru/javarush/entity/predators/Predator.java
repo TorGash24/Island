@@ -15,10 +15,10 @@ public abstract class Predator extends Animal {
 
     public <T extends Animal> void eatAnimal(List<T> victimList) {
         Map<AnimalType, Map<AnimalType, Integer>> probabilities = Config.PROBABILITIES;
-        Iterator<T> iterator = victimList.iterator();
 
-        while (isSatiety() && isEatFood() && iterator.hasNext()) {
-            T victim = iterator.next();
+        for (int i = 0; i < victimList.size(); i++) {
+            T victim = victimList.get(i);
+            if (isSatiety() && isEatFood()) {
             AnimalType predatorType = this.getType();
             if (probabilities.containsKey(predatorType)) {
                 Map<AnimalType, Integer> statistics = probabilities.get(predatorType);
@@ -30,11 +30,33 @@ public abstract class Predator extends Animal {
                     if (RandomClass.getProbability(percent)) {
                         this.setSatiety(Math.min(
                                 this.getSatiety() + victim.getWeight(), this.getMaxSatiety()));
-                        iterator.remove();
+                        victimList.remove(victim);
                     }
                 }
             }
+            }
         }
+//        Map<AnimalType, Map<AnimalType, Integer>> probabilities = Config.PROBABILITIES;
+//        Iterator<T> iterator = victimList.iterator();
+//
+//        while (isSatiety() && isEatFood() && iterator.hasNext()) {
+//            T victim = iterator.next();
+//            AnimalType predatorType = this.getType();
+//            if (probabilities.containsKey(predatorType)) {
+//                Map<AnimalType, Integer> statistics = probabilities.get(predatorType);
+//                AnimalType victimType = victim.getType();
+//
+//                if (statistics.containsKey(victimType)) {
+//
+//                    int percent = statistics.get(victimType);
+//                    if (RandomClass.getProbability(percent)) {
+//                        this.setSatiety(Math.min(
+//                                this.getSatiety() + victim.getWeight(), this.getMaxSatiety()));
+//                        iterator.remove();
+//                    }
+//                }
+//            }
+//        }
     }
 
     @Override

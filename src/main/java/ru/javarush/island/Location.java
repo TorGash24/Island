@@ -12,6 +12,7 @@ import ru.javarush.system.Config;
 import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -34,9 +35,9 @@ public class Location {
 
     public Location(Coordinate coordinate) {
         this.coordinate = coordinate;
-        this.herbivores = addAnimalToLocation(new HerbivoreFactory());
-        this.predators = addAnimalToLocation(new PredatorsFactory());
-        this.plants = addPlantsToLocation();
+        this.herbivores = Collections.synchronizedList(addAnimalToLocation(new HerbivoreFactory()));
+        this.predators = Collections.synchronizedList(addAnimalToLocation(new PredatorsFactory()));
+        this.plants = Collections.synchronizedList(addPlantsToLocation());
     }
 
     public void calculate() {
@@ -75,7 +76,7 @@ public class Location {
         return newPlants;
     }
 
-    private synchronized void eating() {
+    private void eating() {
         lock.lock();
         try {
             for (int i = 0; i < herbivores.size(); i++) {
@@ -99,7 +100,7 @@ public class Location {
         }
     }
 
-    private synchronized void moving() {
+    private void moving() {
         lock.lock();
         try {
             for (int i = 0; i < predators.size(); i++) {
@@ -118,7 +119,7 @@ public class Location {
         }
     }
 
-    private synchronized void breeding() {
+    private void breeding() {
         lock.lock();
         try {
             List<Predator> readyToBreedPredators = new ArrayList<>();
@@ -154,7 +155,7 @@ public class Location {
         }
     }
 
-    private synchronized void endOfTheDAy() {
+    private void endOfTheDAy() {
         lock.lock();
         try {
             List<Predator> predatorIterator = new ArrayList<>(predators);
