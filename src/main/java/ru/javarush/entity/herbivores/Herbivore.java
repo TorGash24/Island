@@ -17,7 +17,7 @@ public abstract class Herbivore extends Animal {
         List<Plant> copyPlantList = new ArrayList<>(plantList);
 
         for (int i = 0; i < copyPlantList.size(); i++) {
-            if (isSatiety()) {
+            if (isSatiety() && isEatFood()) {
                 this.setSatiety(Math.min(
                         this.getSatiety() + Plant.getWEIGHT(), this.getMaxSatiety()));
                 plantList.remove(copyPlantList.get(i));

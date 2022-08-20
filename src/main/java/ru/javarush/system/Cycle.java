@@ -2,11 +2,11 @@ package ru.javarush.system;
 
 import ru.javarush.island.Location;
 
-public class Cicle implements Runnable {
+public class Cycle implements Runnable {
 
     private final Location location;
 
-    public Cicle(Location location) {
+    public Cycle(Location location) {
         this.location = location;
     }
 
@@ -18,6 +18,5 @@ public class Cicle implements Runnable {
         } finally {
             location.getLock().unlock();
         }
-
     }
 }

@@ -12,8 +12,6 @@ import ru.javarush.system.Config;
 import lombok.Getter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -41,7 +39,7 @@ public class Location {
         this.plants = addPlantsToLocation();
     }
 
-    public synchronized void calculate() {
+    public void calculate() {
 
         eating();
         moving();
@@ -101,7 +99,7 @@ public class Location {
         }
     }
 
-    private void moving() {
+    private synchronized void moving() {
         lock.lock();
         try {
             for (int i = 0; i < predators.size(); i++) {
@@ -120,7 +118,7 @@ public class Location {
         }
     }
 
-    private void breeding() {
+    private synchronized void breeding() {
         lock.lock();
         try {
             List<Predator> readyToBreedPredators = new ArrayList<>();
@@ -156,25 +154,26 @@ public class Location {
         }
     }
 
-    private void endOfTheDAy() {
+    private synchronized void endOfTheDAy() {
         lock.lock();
         try {
-            Iterator<Predator> predatorIterator = predators.iterator();
-            Iterator<Herbivore> herbivoreIterator = herbivores.iterator();
+            List<Predator> predatorIterator = new ArrayList<>(predators);
+            List<Herbivore> herbivoreIterator = new ArrayList<>(herbivores);
 
-            while (predatorIterator.hasNext()) {
-                Predator predator = predatorIterator.next();
-                if (!predator.checkIsLive()) {
-                    predatorIterator.remove();
+            for (int i = 0; i < herbivoreIterator.size(); i++) {
+                Herbivore herbivore = herbivoreIterator.get(i);
+                if (herbivore.checkIsDead()) {
+                    herbivores.remove(herbivore);
                 }
             }
 
-            while (herbivoreIterator.hasNext()) {
-                Herbivore herbivore = herbivoreIterator.next();
-                if (!herbivore.checkIsLive()) {
-                    herbivoreIterator.remove();
+            for (int i = 0; i < predatorIterator.size(); i++) {
+                Predator predator = predatorIterator.get(i);
+                if (predator.checkIsDead()) {
+                    predators.remove(predator);
                 }
             }
+
         } catch (RuntimeException e) {
             e.printStackTrace();
         } finally {
@@ -196,39 +195,5 @@ public class Location {
         } else if (animal instanceof Herbivore) {
             herbivores.remove(animal);
         }
-    }
-
-    @Override
-    public String toString() {
-        HashMap<String, Long> statisticsPredatorsToLocation = new HashMap<>();
-        HashMap<String, Long> statisticsHerbivoresToLocation = new HashMap<>();
-
-        for (Predator predator : predators) {
-            String imagePredator = predator.getType().image;
-            Long countPredator = statisticsPredatorsToLocation.get(imagePredator);
-
-            if (countPredator == null) {
-                statisticsPredatorsToLocation.put(imagePredator, 1L);
-            } else {
-                statisticsPredatorsToLocation.put(imagePredator, countPredator + 1);
-            }
-        }
-
-        for (Herbivore herbivore : herbivores) {
-            String imageHerbivore = herbivore.getType().image;
-            Long countHerbivore = statisticsHerbivoresToLocation.get(imageHerbivore);
-
-            if (countHerbivore == null) {
-                statisticsHerbivoresToLocation.put(imageHerbivore, 1L);
-            } else {
-                statisticsHerbivoresToLocation.put(imageHerbivore, countHerbivore + 1);
-            }
-        }
-
-        return "Location " +
-                coordinate + "\n" + "countPredator = " + predators.size() + ", countHerbivores = " + herbivores.size() + ", countPlants = " + plants.size()
-                + "\nPredators =" + statisticsPredatorsToLocation.toString()
-                + "\nHerbivores = " + statisticsHerbivoresToLocation.toString()
-                + "\nPlants = {" + Plant.getTYPE().image + "=" + plants.size() + "}\n";
     }
 }

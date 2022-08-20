@@ -26,13 +26,6 @@ public class Statistic implements Runnable {
     }
 
     private void printStatistic() {
-        System.out.println("=".repeat(20));
-        System.out.println("\tDAY = " + (day.getAndIncrement()));
-        System.out.println("\tAnimals: " + island.countAnimal());
-        System.out.println("\tPredators: " + island.getCountPredators());
-        System.out.println("\tHerbivores: " + island.getCountHerbivores());
-        System.out.println("\tPlants: " + island.getCountPlats());
-        System.out.println("=".repeat(24));
         for (int i = 0; i < locations.length; i++) {
             for (int j = 0; j < locations[i].length; j++) {
                 Location location = locations[i][j];
@@ -60,5 +53,12 @@ public class Statistic implements Runnable {
                 location.getLock().unlock();
             }
         }
+        System.out.println("=".repeat(20));
+        System.out.println("\tDAY = " + (day.getAndIncrement()));
+        System.out.println("\tAnimals: " + island.countAnimal());
+        System.out.println("\tPredators: " + island.getCountPredators());
+        System.out.println("\tHerbivores: " + island.getCountHerbivores());
+        System.out.println("\tPlants: " + island.getCountPlats());
+        System.out.println("=".repeat(24));
     }
 }

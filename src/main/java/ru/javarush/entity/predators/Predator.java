@@ -1,11 +1,9 @@
 package ru.javarush.entity.predators;
 
-import ru.javarush.factory.AbstractFactory;
 import ru.javarush.factory.PredatorsFactory;
 import ru.javarush.entity.Animal;
 import ru.javarush.system.Config;
 import ru.javarush.system.Config.*;
-import ru.javarush.island.Location;
 
 import java.util.*;
 
@@ -19,7 +17,7 @@ public abstract class Predator extends Animal {
         Map<AnimalType, Map<AnimalType, Integer>> probabilities = Config.PROBABILITIES;
         Iterator<T> iterator = victimList.iterator();
 
-        while (isSatiety() && iterator.hasNext()) {
+        while (isSatiety() && isEatFood() && iterator.hasNext()) {
             T victim = iterator.next();
             AnimalType predatorType = this.getType();
             if (probabilities.containsKey(predatorType)) {
