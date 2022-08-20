@@ -41,31 +41,12 @@ public class GameWorker extends Thread {
         for (Cicle cicle : cicleTasks) {
             gameTask.scheduleWithFixedDelay(cicle, 2000, 2000, TimeUnit.MILLISECONDS);
         }
-    }
 
-//    private void startGame() {
-//        Island island = game.getIsland();
-//        Location[][] locations = island.getLocations();
-//        System.out.println("Start game");
-//        game.printStatistic();
-//        int corePoolSize = 1;
-//        ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(corePoolSize);
-//        int day = 1;
-//        while (day < Config.COUNT_DAY) {
-//            for (int x = 0; x < locations.length; x++) {
-//                for (int y = 0; y < locations[x].length; y++) {
-//                    Location currentLocation = locations[x][y];
-//                    long duration = Config.CYCLE_DURATION;
-//                    scheduledExecutorService.scheduleWithFixedDelay(new Cicle(currentLocation), duration, duration, TimeUnit.MILLISECONDS);
-//                }
-//            }
-//            System.out.println("+".repeat(20));
-//            System.out.println("Day = " + day);
-//            System.out.println("+".repeat(20));
-//            day ++;
-//            game.printStatistic();
-//        }
-//        System.out.println("End game");
-//        scheduledExecutorService.shutdown();
-//    }
+        while (game.getIsland().countAnimal() >0 ) {
+
+        }
+        statisticTask.shutdown();
+        gameTask.shutdown();
+        growPlants.shutdown();
+    }
 }
