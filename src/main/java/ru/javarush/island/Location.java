@@ -106,12 +106,12 @@ public class Location {
         try {
             for (int i = 0; i < predators.size(); i++) {
                 Predator predator = predators.get(i);
-                predator.chooseDirection(this, Island.createAndGetIsland());
+                predator.chooseDirection(this, Island.getReferenceIsland());
             }
 
             for (int i = 0; i < herbivores.size(); i++) {
                 Herbivore herbivore = herbivores.get(i);
-                herbivore.chooseDirection(this, Island.createAndGetIsland());
+                herbivore.chooseDirection(this, Island.getReferenceIsland());
             }
         } catch (RuntimeException e) {
             e.printStackTrace();

@@ -4,7 +4,10 @@ import ru.javarush.entity.Animal;
 import ru.javarush.system.Config;
 import lombok.Getter;
 
+import java.util.Optional;
+
 public class Island {
+    public static Island referenceIsland = null;
 
     @Getter
     private final Island island;
@@ -16,6 +19,11 @@ public class Island {
         locations = new Location[Config.WIDTH][Config.HEIGHT];
         initialize();
         island = this;
+        referenceIsland = island;
+    }
+
+    public static Island getReferenceIsland() {
+        return referenceIsland;
     }
 
 
